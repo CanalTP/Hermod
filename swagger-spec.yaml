@@ -2,9 +2,10 @@ openapi: "3.0.0"
 info:
   description: >
     This API aims to improve the transport data accuracy by allowing consumers to suggest patches for different
-    resources.
+    resources.<br>
+    Don't forget to pass token in "Authorization" section header
   version: "0.2.0"
-  title: "Hermod - the Crowd sourcing API"
+  title: "Hermod - the Crowdsourcing API"
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
@@ -98,6 +99,7 @@ components:
     apiKey:
       type: apiKey
       in: header
+      description: toto
       name: Authorization
   responses:
     UnauthorizedError:
@@ -261,7 +263,7 @@ components:
           format: "float"
     Status:
         type: "string"
-        enum: ["OK", "KO"]
+        enum: ["available", "unavailable", "coming_soon", "disturbed"]
     UnauthorizedError:
       properties:
         error:
