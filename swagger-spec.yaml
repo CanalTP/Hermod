@@ -28,7 +28,7 @@ paths:
               $ref: '#/components/schemas/LocationPatchElevator'
       tags:
         - "patches"
-      summary: "Create a stop point patch"
+      summary: "Update the location information"
       responses:
         201:
           description: "Everything went fine"
@@ -41,8 +41,8 @@ paths:
   /v1/patches/location/from_user:
     post:
       tags:
-      - "patches"
-      summary: "Create a stop point patch using the given end-user GPS coord / accuracy"
+        - "patches"
+      summary: "Update the location information with reporter location"
       requestBody:
         required: true
         content:
@@ -62,7 +62,7 @@ paths:
     post:
       tags:
       - "patches"
-      summary: "Report the status of an equipment"
+      summary: "Update the status information"
       requestBody:
         required: true
         content:
@@ -97,10 +97,8 @@ paths:
 components:
   securitySchemes:
     apiKey:
-      type: apiKey
-      in: header
-      description: toto
-      name: Authorization
+      type: http
+      scheme: basic
   responses:
     UnauthorizedError:
       description: API key is missing or invalid
@@ -120,12 +118,14 @@ components:
       required:
         - type
         - elevator
+        - current_status
+        - patched_status
       properties:
         type:
           type: "string"
           example: "elevator"
-          description: "Equipment type"
-          enum: ["elevator", "stop_point"]
+          description: "Type of object sent"
+          enum: ["elevator"]
         elevator:
           $ref: '#/components/schemas/Elevator'
         current_status:
@@ -141,33 +141,15 @@ components:
         - patched_location
       properties:
         type:
-          type: "string"
-          example: "elevator"
-          description: "Equipment type"
-          enum: ["elevator", "stop_point"]
+          $ref: '#/components/schemas/Type'
         elevator:
           $ref: '#/components/schemas/Elevator'
         current_location:
           $ref: "#/components/schemas/Coord"
         patched_location:
           $ref: "#/components/schemas/Coord"
-        gps:
-          $ref: "#/components/schemas/Gps"
-    Elevator:
-      type: "object"
-      required:
-        - id
-        - name
-        - source
-      properties:
-        id:
-          type: "string"
-          description: "id of equipment"
-        name:
-          type: "string"
-          description: "name of equipment"
-        source:
-          $ref: "#/components/schemas/Source"
+        reporter_location:
+          $ref: "#/components/schemas/ReporterLocation"
     LocationPatchStopPoint:
       type: "object"
       required:
@@ -179,35 +161,41 @@ components:
         type:
           type: "string"
           example: "stop_point"
-          description: "Equipment type"
-          enum: ["elevator", "stop_point"]
+          description: "Type of object sent"
+          enum: ["stop_point"]
         stop_point:
           $ref: '#/components/schemas/StopPoint'
         current_location:
           $ref: "#/components/schemas/Coord"
         patched_location:
           $ref: "#/components/schemas/Coord"
-        gps:
-          $ref: "#/components/schemas/Gps"
+        reporter_location:
+          $ref: "#/components/schemas/ReporterLocation"
     LocationPatchStopPointFromUser:
       type: "object"
       required:
         - stop_point
         - type
         - current_location
+        - reporter_location
       properties:
         type:
           type: "string"
           example: "stop_point"
-          description: "Equipment type"
-          enum: ["elevator", "stop_point"]
+          description: "Type of object sent"
+          enum: ["stop_point"]
         stop_point:
           $ref: '#/components/schemas/StopPoint'
         current_location:
           $ref: "#/components/schemas/Coord"
-        gps:
-          $ref: "#/components/schemas/Gps"
-    StopPoint:
+        reporter_location:
+          $ref: "#/components/schemas/ReporterLocation"
+    Type:
+      type: "string"
+      example: "elevator"
+      description: "Type of object sent"
+      enum: ["elevator", "stop_point"]
+    Elevator:
       type: "object"
       required:
         - id
@@ -216,10 +204,26 @@ components:
       properties:
         id:
           type: "string"
-          description: "id of equipment"
+          description: "id of elevator"
         name:
           type: "string"
-          description: "name of equipment"
+          description: "name of elevator"
+        source:
+          $ref: "#/components/schemas/Source"
+    StopPoint:
+      type: "object"
+      required:
+        - id
+        - name
+        - route
+        - source
+      properties:
+        id:
+          type: "string"
+          description: "id of stop point"
+        name:
+          type: "string"
+          description: "name of stop point"
         route:
           $ref: "#/components/schemas/Route"
         source:
@@ -230,10 +234,11 @@ components:
       properties:
         name:
           type: "string"
-          description: "The data source name"
+          description: "Reference of object"
+          example: "navitia2"
     Route:
       type: "object"
-      required: ["id"]
+      required: ["id", "name"]
       properties:
         id:
           type: "string"
@@ -241,8 +246,9 @@ components:
         name:
           type: "string"
           description: "Route name"
-    Gps:
+    ReporterLocation:
       type: "object"
+      required: [""]
       properties:
         location:
           $ref: '#/components/schemas/Coord'
@@ -274,7 +280,7 @@ components:
           type: "array"
           items:
             type: "string"
-            example: "No user found with token XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+            example: "Credential is invalid"
     InvalidRequestError:
       properties:
         error:
@@ -285,4 +291,4 @@ components:
           type: "array"
           items:
             type: "string"
-            example: "some input params are invalid"
+            example: "Some input params are invalid"
