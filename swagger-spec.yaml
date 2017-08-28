@@ -98,7 +98,7 @@ components:
     apiKey:
       type: apiKey
       in: header
-      name: Autorization
+      name: Authorization
   responses:
     UnauthorizedError:
       description: API key is missing or invalid
