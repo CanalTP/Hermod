@@ -234,7 +234,7 @@ components:
       properties:
         name:
           type: "string"
-          description: "Reference of object"
+          description: "Name of repository containing object references"
           example: "navitia2"
     Route:
       type: "object"
