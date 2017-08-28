@@ -19,11 +19,12 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/json+stop_point:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/LocationPatchStopPoint'
-                - $ref: '#/components/schemas/LocationPatchElevator'
+              $ref: '#/components/schemas/LocationPatchStopPoint'
+          application/json+elevator:
+            schema:
+              $ref: '#/components/schemas/LocationPatchElevator'
       tags:
         - "patches"
       summary: "Create a stop point patch"
@@ -137,7 +138,7 @@ components:
         - current_location
         - patched_location
       properties:
-        type: 
+        type:
           type: "string"
           example: "elevator"
           description: "Equipment type"
@@ -173,7 +174,7 @@ components:
         - current_location
         - patched_location
       properties:
-        type: 
+        type:
           type: "string"
           example: "stop_point"
           description: "Equipment type"
@@ -193,7 +194,7 @@ components:
         - type
         - current_location
       properties:
-        type: 
+        type:
           type: "string"
           example: "stop_point"
           description: "Equipment type"
