@@ -35,7 +35,7 @@ class ElevatorController extends BaseController
      */
     public function importCsvAction(Request $request)
     {
-        $mandatoryHeaders = ['code', 'station_id', 'station_name', 'human_location', 'source_name', 'direction'];
+        $mandatoryHeaders = ['id', 'code', 'station_id', 'station_name', 'human_location', 'direction', 'source_name'];
         try {
             $csv = Csv::parse($request->getContent(), $mandatoryHeaders);
         } catch (\InvalidArgumentException $e) {

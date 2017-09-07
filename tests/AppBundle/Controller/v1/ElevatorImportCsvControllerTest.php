@@ -24,7 +24,7 @@ CSV;
     public function testMandatoryCsvHeadersAreEnforced()
     {
         $response = $this->client->request('POST', 'elevators/import/csv', ['body' => $this->missingHeadersCsv]);
-        $this->assertError($response, 400, 'bad_request', 'missing headers: \'station_name\', \'human_location\', \'source_name\'');
+        $this->assertError($response, 400, 'bad_request', 'missing headers: \'id\', \'station_name\', \'human_location\', \'source_name\'');
     }
 
     public function testCreateElevatorsWithCsv()
