@@ -7,6 +7,7 @@ use AppBundle\Entity\Elevator;
 use AppBundle\Http\Exception\BadRequestException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Util\Csv;
 
@@ -16,6 +17,7 @@ use AppBundle\Util\Csv;
 class ElevatorController extends BaseController
 {
     /**
+     * @Security("has_role('ROLE_ROOT')")
      * @Route("/_all")
      * @Method("GET")
      */
@@ -27,7 +29,8 @@ class ElevatorController extends BaseController
     }
 
     /**
-     * @Route("/import/csv")
+     * @Security("has_role('ROLE_V1_ELEVATOR_IMPORT_CSV')")
+     * @Route("/import/csv", name="v1_elevator_import_csv")
      * @Method("POST")
      */
     public function importCsvAction(Request $request)
