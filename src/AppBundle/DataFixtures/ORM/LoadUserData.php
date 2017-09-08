@@ -11,13 +11,18 @@ class LoadUserData implements FixtureInterface
     private $users = [
         [
             'username' => 'test',
-            'token' => 'a2540dc6-5b0b-45b9-8a7d-8c6fcf03e1df'
+            'token' => 'a2540dc6-5b0b-45b9-8a7d-8c6fcf03e1df',
+            'roles' => ['ROLE_ROOT']
         ]
     ];
 
     private function createUser(array $data)
     {
-        return new User($data['username'], $data['token']);
+        $user = new User($data['username'], $data['token']);
+
+        $user->setRoles($data['roles']);
+
+        return $user;
     }
 
     public function load(ObjectManager $manager)

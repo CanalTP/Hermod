@@ -48,6 +48,13 @@ class User
     private $statusPatches;
 
     /**
+     * @ORM\Column(type="json_array")
+     *
+     * @var array of roles
+     */
+    private $roles;
+
+    /**
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
@@ -67,6 +74,7 @@ class User
     {
         $this->username = $username;
         $this->token = $token;
+        $this->roles = [];
         $this->locationPatches = new ArrayCollection();
         $this->statusPatches = new ArrayCollection();
     }
@@ -78,7 +86,14 @@ class User
 
     public function getRoles() : array
     {
-        return ['ROLE_USER'];
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles) : User
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     public function getToken() : string
@@ -89,6 +104,7 @@ class User
     public function setToken($token) : User
     {
         $this->token = $token;
+
         return $this;
     }
 
@@ -100,6 +116,7 @@ class User
     public function setUsername($username) : User
     {
         $this->username = $username;
+
         return $this;
     }
 
