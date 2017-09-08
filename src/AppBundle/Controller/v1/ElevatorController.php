@@ -17,7 +17,7 @@ use AppBundle\Util\Csv;
 class ElevatorController extends BaseController
 {
     /**
-     * @Security("has_role('ROLE_DEV')")
+     * @Security("has_role('ROLE_ROOT')")
      * @Route("/_all")
      * @Method("GET")
      */

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AppController extends BaseController
 {
     /**
-     * @Security("has_role('ROLE_DEV')")
+     * @Security("has_role('ROLE_ROOT')")
      * @Route("/status", name="v1_status")
      * @Method("GET")
      */

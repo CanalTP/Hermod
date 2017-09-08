@@ -20,7 +20,7 @@ use AppBundle\Model\Api\Json\LocationPatch\StopPointFromReporter as StopPointLoc
 class LocationPatchController extends BaseController
 {
     /**
-     * @Security("has_role('ROLE_DEV')")
+     * @Security("has_role('ROLE_ROOT')")
      * @Route("/_all", name="v1_get_all_location_patches")
      * @Method("GET")
      */
