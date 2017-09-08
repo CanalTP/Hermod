@@ -11,9 +11,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        unsecured_area:
-            pattern: ^/v1/status
-            security: false
         secured_area:
             pattern: ^/v1/
             stateless: true
@@ -21,5 +18,9 @@ security:
                 authenticator: AppBundle\Security\TokenAuthenticator
             provider: token_user_provider
 
-    access_control:
-        - { path: ^/v1/, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_DEV:
+            - ROLE_V1_STATUS_PATCH_CREATE_EQUIPMENT_STATUS
+            - ROLE_V1_LOCATION_PATCH_CREATE
+            - ROLE_V1_LOCATION_PATCH_CREATE_FROM_REPORTER
+            - ROLE_V1_ELEVATOR_IMPORT_CSV
