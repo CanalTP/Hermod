@@ -12,3 +12,4 @@ parameters:
 
     # Default value if env vars does not exist
     env(LOG_PATH): "%kernel.logs_dir%/%kernel.environment%.log"
+    version: '%env(VERSION)%'

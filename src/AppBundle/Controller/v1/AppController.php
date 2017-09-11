@@ -18,7 +18,8 @@ class AppController extends BaseController
     public function statusAction()
     {
         return new JsonResponse([
-            'status' => 'OK'
+            'status' => 'OK',
+            'version' => $this->getParameter('version')
         ]);
     }
 }
