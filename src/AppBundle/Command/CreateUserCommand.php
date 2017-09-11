@@ -5,23 +5,44 @@ namespace AppBundle\Command;
 use AppBundle\Entity\User;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class AddUserCommand extends ContainerAwareCommand
+class CreateUserCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('app:create-user')
+            ->setName('hermod:user:create')
             ->setDescription('Creates a new user and generates its token.')
             ->setHelp(
                 'This command helps you to create a new user by providing its username. '.
                 'The token is automatically generated.'
             )
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the user');
+    }
+
+    private function isUsernameAlreadyUsed($username)
+    {
+        return (bool) $this->getContainer()
+            ->get('doctrine')
+            ->getRepository('AppBundle:User')
+            ->findOneBy(['username' => $username]);
+    }
+
+    private function addRoleForUser(OutputInterface $output, string $username)
+    {
+        $commandName = 'hermod:user:role';
+        $command = $this->getApplication()->find($commandName);
+        $arguments = [
+            'command' => $commandName,
+            'username' => $username
+        ];
+
+        $command->run(new ArrayInput($arguments), $output);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -48,13 +69,6 @@ class AddUserCommand extends ContainerAwareCommand
         $em->flush();
 
         $io->success(sprintf('User "%s" created successfully! Here is the token: "%s"', $username, $token));
-    }
-
-    private function isUsernameAlreadyUsed($username)
-    {
-        return (bool) $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('AppBundle:User')
-            ->findOneBy(['username' => $username]);
+        $this->addRoleForUser($output, $username);
     }
 }
