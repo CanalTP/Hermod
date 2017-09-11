@@ -74,7 +74,7 @@ Now you can create hermod stack
 DOCKER_REGISTRY_HOST=YOUR_DOCKER_REGISTRY_HOST:5000 VERSION=0.1.0 HOST=hermod.localhost docker stack deploy -c docker/docker-compose.prod.yml hermod
 ```
 
-Go to `http://hermod.localhost/v1/status`, the api should works
+Follow [Authentification](#authentification) instruction and go to `http://hermod.localhost/v1/status`, the api should works
 
 ## Authentication
 
@@ -83,10 +83,17 @@ You need to be authenticated to use this API. We are using a token authenticatio
 You can add a new user by using the following command:
 
 ```
-bin/console app:create-user <username>
+bin/console hermod:user:create <username>
 ```
 
-This command will give you a token, and on every request, you will need to provide this token in the `Authorization` header.
+This command will give you a token with roles, and on every request, you will need to provide this token in the `Authorization` header.
+
+If you want to edit user roles you can use this command
+
+```
+bin/console hermod:user:role <username>
+```
+
 
 ## Stop application
 
