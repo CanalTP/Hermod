@@ -19,7 +19,7 @@ class AppController extends BaseController
     {
         return new JsonResponse([
             'status' => 'OK',
-            'version' => $this->hasParameter('version') ? $this->getParameter('version') : 'unknown'
+            'version' => $this->container->hasParameter('version') ? $this->getParameter('version') : 'unknown'
         ]);
     }
 }
