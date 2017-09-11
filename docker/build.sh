@@ -8,9 +8,9 @@ VERSION=$(git describe --tags --exact-match)
 if [ ! -f 'docker/config.env' ]; then
     echo "'docker/config.env' environment file is missing. Please create it, see docker/config.env.dist for example"
     exit 66 # EX_NOINPUT
-else
-    sed -Ei "s/VERSION=(.)*/VERSION=${VERSION}/g" config.env
 fi
+
+sed -Ei "s/VERSION=(.)*/VERSION=${VERSION}/g" config.env
 
 cp app/config/parameters.yml.dist app/config/parameters.yml
 docker run --rm \
