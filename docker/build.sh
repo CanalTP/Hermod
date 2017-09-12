@@ -10,6 +10,8 @@ if [ ! -f 'docker/config.env' ]; then
     exit 66 # EX_NOINPUT
 fi
 
+sed -Ei "s/VERSION=(.)*/VERSION=${VERSION}/g" config.env
+
 cp app/config/parameters.yml.dist app/config/parameters.yml
 docker run --rm \
     --user $(id -u) \
