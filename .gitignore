@@ -1,5 +1,4 @@
 /.web-server-pid
-/app/config/parameters.yml
 /build/
 /var/*
 !/var/cache
@@ -12,8 +11,25 @@
 /var/sessions/*
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
-/vendor/
+junit.xml
+
+# configuration
+/app/config/parameters.yml
+
+# assets
 /web/bundles/
+
+# vendors
+/vendor/
+
+# docker
 /docker/postgres/data
 /docker/*.env
-junit.xml
+
+# IDE / text editor
+nbproject
+.idea
+/.settings/
+/.buildpath
+/.project
+*~

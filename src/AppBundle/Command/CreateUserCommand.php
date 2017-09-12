@@ -58,7 +58,7 @@ class CreateUserCommand extends ContainerAwareCommand
         }
 
         while ($this->isUsernameAlreadyUsed($username)) {
-            $username = $io->ask(sprintf('Username %s is already used, please choose another one', $username));
+            $username = $io->ask(sprintf('Username "%s" already exists, please choose another name', $username));
         }
 
         $token = Uuid::uuid4();
@@ -68,7 +68,7 @@ class CreateUserCommand extends ContainerAwareCommand
         $em->persist($user);
         $em->flush();
 
-        $io->success(sprintf('User "%s" created successfully! Here is the token: "%s"', $username, $token));
+        $io->success(sprintf('User "%s" created successfully!'. PHP_EOL .'Here\'s its authentication token: "%s"', $username, $token));
         $this->addRoleForUser($output, $username);
     }
 }
