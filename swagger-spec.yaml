@@ -16,6 +16,16 @@ tags:
     description: Suggest patches to improve information
   - name: status
     description: Verify the API status
+servers:
+  - url: '{protocol}://{server}'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      server:
+        default: api.example.com
 paths:
   /v1/elevators/:
     get:
@@ -124,8 +134,9 @@ paths:
 components:
   securitySchemes:
     apiKey:
-      type: http
-      scheme: basic
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
   responses:
     UnauthorizedError:
       description: API key is missing or invalid
