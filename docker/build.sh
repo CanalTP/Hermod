@@ -3,7 +3,8 @@
 set -ex
 
 # You should be on origin/release
-VERSION=$(git describe --abbrev=0 --tags)
+LAST_VERSION=$(git describe --tags --abbrev=0)
+VERSION=${VERSION:-$LAST_VERSION}
 
 if [ ! -f 'docker/config.env' ]; then
     echo "'docker/config.env' environment file is missing. Please create it, see docker/config.env.dist for example"
