@@ -29,12 +29,6 @@ RUN BUILD_DEPS="g++ libicu-dev" && \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
-# Install cgi-fcgi for healthcheck
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    libfcgi0ldbl \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get autoremove -y
-
 RUN echo 'date.timezone = "UTC"' >> /usr/local/etc/php/php.ini
 RUN echo 'opcache.max_accelerated_files = 20000' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
@@ -53,6 +47,12 @@ RUN curl -sS https://getcomposer.org/installer | \
     && composer run-script --no-dev build-parameters \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false unzip \
     && rm -f /usr/bin/composer
+
+# Install cgi-fcgi for healthcheck
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+    libfcgi0ldbl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get autoremove -y
 
 RUN useradd --home-dir /srv/hermod/ hermod
 RUN chown -R hermod:hermod /srv/hermod/
