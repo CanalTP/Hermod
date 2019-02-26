@@ -2,11 +2,11 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\User;
 
-class LoadUserData implements FixtureInterface
+class LoadUserData extends Fixture
 {
     private $users = [
         [

@@ -13,13 +13,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CreateUserCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'hermod:user:create';
+
     protected function configure()
     {
         $this
-            ->setName('hermod:user:create')
             ->setDescription('Creates a new user and generates its token.')
             ->setHelp(
-                'This command helps you to create a new user by providing its username. '.
+                'This command helps you to create a new user by providing its username. ' .
                 'The token is automatically generated.'
             )
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the user');
@@ -27,7 +28,7 @@ class CreateUserCommand extends ContainerAwareCommand
 
     private function isUsernameAlreadyUsed($username)
     {
-        return (bool) $this->getContainer()
+        return (bool)$this->getContainer()
             ->get('doctrine')
             ->getRepository('AppBundle:User')
             ->findOneBy(['username' => $username]);
@@ -68,7 +69,7 @@ class CreateUserCommand extends ContainerAwareCommand
         $em->persist($user);
         $em->flush();
 
-        $io->success(sprintf('User "%s" created successfully!'. PHP_EOL .'Here\'s its authentication token: "%s"', $username, $token));
+        $io->success(sprintf('User "%s" created successfully!' . PHP_EOL . 'Here\'s its authentication token: "%s"', $username, $token));
         $this->addRoleForUser($output, $username);
     }
 }

@@ -7,13 +7,26 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use AppBundle\Services\LocationPatch as LocationPatchService;
 
 class SendReportCommand extends ContainerAwareCommand
 {
+    // to make command lazily loaded, configure the $defaultName static property,
+    // so it will be instantiated only when the command is actually called.
+    protected static $defaultName = 'hermod:report:send';
+
+    private $locationPatchService;
+
+    public function __construct(LocationPatchService $locationPatchService)
+    {
+        $this->locationPatchService = $locationPatchService;
+
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
-            ->setName('hermod:report:send')
             ->setDescription('Send report by mail.')
             ->setHelp('This command send email with report file.')
             ->addArgument('to', InputArgument::REQUIRED, 'Email of recipient in to')
@@ -23,18 +36,17 @@ class SendReportCommand extends ContainerAwareCommand
     private function getCsvReport()
     {
         $date = new \DateTime();
-        $endDate  = $date->format('Y-m-d');
+        $endDate = $date->format('Y-m-d');
         $startDate = $date->modify('-7 days')->format('Y-m-d');
-        $report = $this->getContainer()->get('AppBundle\Services\LocationPatch')->getCsvReportByPeriod($startDate, $endDate);
+        $report = $this->locationPatchService->getCsvReportByPeriod($startDate, $endDate);
 
         return (new \Swift_Attachment())
             ->setFilename('reporting_location_patch_between_' . $startDate . '_and_' . $endDate . '.csv')
             ->setContentType('text/csv')
-            ->setBody($report)
-        ;
+            ->setBody($report);
     }
 
-    private function getMessage($to, $cc) : \Swift_Message
+    private function getMessage($to, $cc): \Swift_Message
     {
         $templating = $this->getContainer()->get('templating');
 
@@ -59,6 +71,6 @@ class SendReportCommand extends ContainerAwareCommand
         $message = $this->getMessage($to, $cc);
 
         $mailer->send($message);
-        $io->success('[' . date("Y-m-d h:i:s") . '] - Message sent to: "'. $to .'" cc: "'. implode(', ', $cc) .'"');
+        $io->success('[' . date("Y-m-d h:i:s") . '] - Message sent to: "' . $to . '" cc: "' . implode(', ', $cc) . '"');
     }
 }

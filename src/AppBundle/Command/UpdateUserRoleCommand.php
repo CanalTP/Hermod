@@ -11,6 +11,8 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class UpdateUserRoleCommand extends ContainerAwareCommand
 {
+    protected static $defaultName = 'hermod:user:role';
+
     private $io = null;
     private $user = null;
     private $roles = [
@@ -24,7 +26,6 @@ class UpdateUserRoleCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('hermod:user:role')
             ->setDescription('Update roles of user.')
             ->setHelp(
                 'This command helps you to update role of user by providing its username.'
